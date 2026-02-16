@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react'
 import {useParams } from 'react-router-dom';
 import { Box, Typography} from '@mui/material';
-import { exerciseOptions, fetchData, youtubeOptions } from '../utils/fetchData';
+import { fetchAllExercises, fetchData, youtubeOptions } from '../utils/fetchData';
 import { scrollToTop } from '../utils/scrollUtils';
 import Detail from '../components/Detail';
 import ExerciseVideos from '../components/ExerciseVideos';
@@ -19,11 +19,15 @@ const ExerciseDetail = () => {
   useEffect(() => {
     const fetchExercisesData = async () => {
       try {
-        const exerciseDbUrl = "https://exercisedb.p.rapidapi.com";
         const youtubeSearchUrl = 'https://youtube-search-and-download.p.rapidapi.com';
 
-        const exerciseDetailData = await fetchData(`${exerciseDbUrl}/exercises/exercise/${id}`,
-        exerciseOptions);
+        // Fetch all exercises and find the one matching the ID
+        const allExercises = await fetchAllExercises();
+        const exerciseDetailData = allExercises.find(ex => ex.id === id);
+
+        if (!exerciseDetailData) {
+          throw new Error('Exercise not found');
+        }
 
         setExerciseDetail(exerciseDetailData);
 
@@ -36,7 +40,10 @@ const ExerciseDetail = () => {
         }
 
         try {
-          const targetMuscleExercisesData = await fetchData(`${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`, exerciseOptions);
+          // Find exercises that target the same muscle
+          const targetMuscleExercisesData = allExercises.filter(
+            ex => ex.target === exerciseDetailData.target && ex.id !== id
+          );
           setTargetMuscleExercises(targetMuscleExercisesData);
         } catch (err) {
           console.error('Error fetching target muscle exercises:', err);
@@ -44,7 +51,10 @@ const ExerciseDetail = () => {
         }
 
         try {
-          const equipmentExercisesData = await fetchData(`${exerciseDbUrl}/exercises/equipment/${exerciseDetailData.equipment}`, exerciseOptions)
+          // Find exercises that use the same equipment
+          const equipmentExercisesData = allExercises.filter(
+            ex => ex.equipment === exerciseDetailData.equipment && ex.id !== id
+          );
           setEquipmentExercises(equipmentExercisesData);
         } catch (err) {
           console.error('Error fetching equipment exercises:', err);
