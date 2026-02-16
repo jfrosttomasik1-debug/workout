@@ -2,18 +2,27 @@ import React, {useEffect, useState} from 'react';
 import {Box, Button, Stack, TextField, Typography} from '@mui/material'
 
 import { exerciseOptions, fetchData } from '../utils/fetchData';
+import { scrollToElement } from '../utils/scrollUtils';
 import HorizontalScrollbar from './HorizontalScrollbar';
 
 const SearchExercises = ({setExercises, bodyPart, setBodyPart}) => {
   const [search, setSearch] = useState('');
-  
+
   const [bodyParts, setBodyParts] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchExercisesData = async () => {
-      const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions)
+      try {
+        const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions)
 
-      setBodyParts(['all', ...bodyPartsData])
+        setBodyParts(['all', ...bodyPartsData])
+        setError('');
+      } catch (err) {
+        console.error('Error fetching body parts:', err);
+        setError('Failed to load body parts. Please refresh the page.');
+        setBodyParts(['all']);
+      }
     }
 
     fetchExercisesData();
@@ -21,19 +30,25 @@ const SearchExercises = ({setExercises, bodyPart, setBodyPart}) => {
   
   const handleSearch = async () => {
     if(search) {
-      const exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
-    
-      const searchedExercises = exercisesData.filter(
-        (exercise) => exercise.name.toLowerCase().includes(search)
-        || exercise.target.toLowerCase().includes(search)
-        || exercise.equipment.toLowerCase().includes(search)
-        || exercise.bodyPart.toLowerCase().includes(search)
-      )
-    
-      setSearch('');
-      setExercises(searchedExercises); 
+      try {
+        const exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
+
+        const searchedExercises = exercisesData.filter(
+          (exercise) => exercise.name.toLowerCase().includes(search)
+          || exercise.target.toLowerCase().includes(search)
+          || exercise.equipment.toLowerCase().includes(search)
+          || exercise.bodyPart.toLowerCase().includes(search)
+        )
+
+        setSearch('');
+        setExercises(searchedExercises);
+        setError('');
+        scrollToElement('exercises', 100);
+      } catch (err) {
+        console.error('Error searching exercises:', err);
+        setError('Failed to search exercises. Please try again.');
+      }
     }
-    window.scrollTo({top: 1800, left: 100, behavior: 'smooth'});
   }
 
   return (
@@ -79,6 +94,12 @@ const SearchExercises = ({setExercises, bodyPart, setBodyPart}) => {
             Search
           </Button>
         </Box>
+
+        {error && (
+          <Typography color='error' sx={{ mb: '20px', textAlign: 'center' }}>
+            {error}
+          </Typography>
+        )}
 
         <Box sx={{position: 'relative', width: '100%', p: '20px'}}>
           <Typography variant="h4" sx={{alignItems: "center"}}> Scroll Right and Left with Two Finger Drag or Mouse to View More Clickable Options</Typography>
