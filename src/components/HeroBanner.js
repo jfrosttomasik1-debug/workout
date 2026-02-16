@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Button } from '@mui/material';
 import HeroBannerImage from '../assets/images/banner.png'
 
 const HeroBanner = () => {
@@ -12,11 +12,12 @@ const HeroBanner = () => {
             Fitness Club
         </Typography>
 
-        <Typography fontWeight={700}
-        sx={{ fontSize: {lg: '44px', xs: '40px'}}}
-        mb='23px'mt='30px'
+        <Typography
+          fontWeight={700}
+          sx={{ fontSize: {lg: '44px', xs: '40px'}, mb: '23px', mt: '30px' }}
+          component='h1'
         >
-            Sweat, Smile <br/> 
+            Sweat, Smile <br/>
             And Repeat
         </Typography>
 
@@ -25,17 +26,44 @@ const HeroBanner = () => {
         </Typography>
 
         <Stack>
-            <a href="#exercises" style={{ marginTop: '45px', textDecoration: 'none', width: '200px', textAlign: 'center', background: '#FF2625', padding: '14px', fontSize: '22px', textTransform: 'none', color: 'white', borderRadius: '4px' }}>Explore Exercises</a>
+            <Button
+              component='a'
+              href="#exercises"
+              variant='contained'
+              sx={{
+                marginTop: '45px',
+                width: '200px',
+                textAlign: 'center',
+                background: '#FF2625',
+                padding: '14px',
+                fontSize: '22px',
+                textTransform: 'none',
+                color: 'white',
+                borderRadius: '4px',
+                '&:hover': {
+                  background: '#E01E1E',
+                  textDecoration: 'none'
+                },
+                '&:focus': {
+                  outline: '2px solid white',
+                  outlineOffset: '2px'
+                }
+              }}
+            >
+              Explore Exercises
+            </Button>
         </Stack>
-        
-        <Typography fontWeight={600} color="#ff2625" sx={{ 
+
+        <Typography fontWeight={600} color="#ff2625" sx={{
             opacity: 0.1,
             display: {lg: 'block', xs: 'none'}
-            }} fontSize='200px'>
+            }} fontSize='200px'
+            aria-hidden='true'
+        >
             Exercise
         </Typography>
-        <img src={HeroBannerImage} alt='hero-banner' className='hero-banner-img'></img>
-        
+        <img src={HeroBannerImage} alt='Fitness banner showing exercise equipment' className='hero-banner-img' />
+
     </Box>
   )
 }

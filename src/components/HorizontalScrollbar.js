@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { Box, Typography} from '@mui/material';
+import React from 'react';
+import { Box } from '@mui/material';
 import BodyPart from './BodyPart';
 import ExerciseCard from './ExerciseCard'
-import {ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import {ScrollMenu } from 'react-horizontal-scrolling-menu';
 // import RightArrowIcon from '../assets/icons/right-arrow.png';
 // import LeftArrowIcon from '../assets/icons/left-arrow.png';
 
