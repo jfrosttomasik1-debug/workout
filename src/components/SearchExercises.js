@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Stack, TextField, Typography} from '@mui/material'
 
-import { exerciseOptions, fetchData } from '../utils/fetchData';
+import { fetchAllExercises } from '../utils/fetchData';
 import { scrollToElement } from '../utils/scrollUtils';
 import HorizontalScrollbar from './HorizontalScrollbar';
 
@@ -14,9 +14,13 @@ const SearchExercises = ({setExercises, bodyPart, setBodyPart}) => {
   useEffect(() => {
     const fetchExercisesData = async () => {
       try {
-        const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions)
+        const allExercises = await fetchAllExercises();
 
-        setBodyParts(['all', ...bodyPartsData])
+        // Extract unique body parts from exercises
+        const uniqueBodyParts = [...new Set(allExercises.map(ex => ex.bodyPart))];
+        const sortedBodyParts = uniqueBodyParts.sort();
+
+        setBodyParts(['all', ...sortedBodyParts])
         setError('');
       } catch (err) {
         console.error('Error fetching body parts:', err);
@@ -31,9 +35,9 @@ const SearchExercises = ({setExercises, bodyPart, setBodyPart}) => {
   const handleSearch = async () => {
     if(search) {
       try {
-        const exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
+        const allExercises = await fetchAllExercises();
 
-        const searchedExercises = exercisesData.filter(
+        const searchedExercises = allExercises.filter(
           (exercise) => exercise.name.toLowerCase().includes(search)
           || exercise.target.toLowerCase().includes(search)
           || exercise.equipment.toLowerCase().includes(search)

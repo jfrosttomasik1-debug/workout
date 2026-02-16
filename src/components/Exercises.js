@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Pagination  from "@mui/material/Pagination";
 import { Box, Stack, Typography } from '@mui/material';
 
-import {exerciseOptions, fetchData } from '../utils/fetchData';
+import { fetchAllExercises } from '../utils/fetchData';
 import { scrollToElement } from '../utils/scrollUtils';
 import ExerciseCard from './ExerciseCard';
 import Loader from './Loader';
@@ -28,11 +28,12 @@ const Exercises = ({exercises, setExercises, bodyPart}) => {
     const fetchExercisesData = async () => {
       try {
         let exercisesData = [];
+        const allExercises = await fetchAllExercises();
 
         if(bodyPart === 'all') {
-          exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
+          exercisesData = allExercises;
         } else {
-          exercisesData = await fetchData(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`, exerciseOptions);
+          exercisesData = allExercises.filter(exercise => exercise.bodyPart === bodyPart);
         }
 
         setExercises(exercisesData);
