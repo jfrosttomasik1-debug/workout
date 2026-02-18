@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Stack, Button } from '@mui/material';
 import FallbackImage from './FallbackImage';
+import AddToWorkoutButton from './AddToWorkoutButton';
 
 import BodyPartImage from '../assets/icons/body-part.png';
 import TargetImage from '../assets/icons/target.png';
@@ -49,6 +50,7 @@ const Detail = ({ exerciseDetail }) => {
                 </Typography>
               </Stack>
             ))}
+            <AddToWorkoutButton exercise={exerciseDetail} />
         </Stack>
     </Stack>
   )
