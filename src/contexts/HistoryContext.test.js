@@ -66,7 +66,7 @@ describe('HistoryContext', () => {
       result.current.clearHistory();
     });
     expect(result.current.history).toHaveLength(0);
-    expect(localStorage.getItem('exerciseHistory')).toBeNull();
+    expect(localStorage.getItem('exerciseHistory')).toBe('[]');
   });
 
   test('ignores exercise without id', () => {
