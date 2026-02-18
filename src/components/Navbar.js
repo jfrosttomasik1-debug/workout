@@ -62,6 +62,58 @@ const Navbar = () => {
                 >
                   Exercises
                 </a>
+                <Link
+                  to='/workout'
+                  style={{
+                    textDecoration: 'none',
+                    color: linkColor,
+                    padding: '8px 0',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.target.style.outline = '2px solid #FF2625'}
+                  onBlur={(e) => e.target.style.outline = 'none'}
+                >
+                  Workout
+                </Link>
+                <Link
+                  to='/history'
+                  style={{
+                    textDecoration: 'none',
+                    color: linkColor,
+                    padding: '8px 0',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.target.style.outline = '2px solid #FF2625'}
+                  onBlur={(e) => e.target.style.outline = 'none'}
+                >
+                  History
+                </Link>
+                <Link
+                  to='/favorites'
+                  style={{
+                    textDecoration: 'none',
+                    color: linkColor,
+                    padding: '8px 0',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.target.style.outline = '2px solid #FF2625'}
+                  onBlur={(e) => e.target.style.outline = 'none'}
+                >
+                  Favorites
+                </Link>
+                <Link
+                  to='/tracking'
+                  style={{
+                    textDecoration: 'none',
+                    color: linkColor,
+                    padding: '8px 0',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.target.style.outline = '2px solid #FF2625'}
+                  onBlur={(e) => e.target.style.outline = 'none'}
+                >
+                  Log
+                </Link>
                 <ThemeToggle />
             </Stack>
 

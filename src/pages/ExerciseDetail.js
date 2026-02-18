@@ -1,11 +1,14 @@
 import React, { useEffect, useState} from 'react'
 import {useParams } from 'react-router-dom';
-import { Box, Typography} from '@mui/material';
+import { Box, Typography, Button} from '@mui/material';
 import { fetchAllExercises, fetchData, youtubeOptions } from '../utils/fetchData';
 import { scrollToTop } from '../utils/scrollUtils';
+import { useHistory } from '../contexts/HistoryContext';
 import Detail from '../components/Detail';
 import ExerciseVideos from '../components/ExerciseVideos';
 import SimilarExercises from '../components/SimilarExercises';
+import TrackingForm from '../components/TrackingForm';
+import FavoriteButton from '../components/FavoriteButton';
 
 const ExerciseDetail = () => {
   const [exerciseDetail, setExerciseDetail] = useState({});
@@ -13,8 +16,10 @@ const ExerciseDetail = () => {
   const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
   const [equipmentExercises, setEquipmentExercises] = useState([]);
   const [error, setError] = useState('');
+  const [showTrackingForm, setShowTrackingForm] = useState(false);
 
   const { id } = useParams();
+  const { addToHistory } = useHistory();
 
   useEffect(() => {
     const fetchExercisesData = async () => {
@@ -30,6 +35,7 @@ const ExerciseDetail = () => {
         }
 
         setExerciseDetail(exerciseDetailData);
+        addToHistory(exerciseDetailData);
 
         try {
           const exerciseVideosData = await fetchData(`${youtubeSearchUrl}/search?query=${exerciseDetailData.name}`, youtubeOptions)
@@ -70,7 +76,7 @@ const ExerciseDetail = () => {
 
     fetchExercisesData();
     scrollToTop();
-  }, [id]);
+  }, [id, addToHistory]);
 
   return (
     <Box>
@@ -79,7 +85,29 @@ const ExerciseDetail = () => {
           {error}
         </Typography>
       )}
+      {exerciseDetail.id && (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: { sm: '100px', xs: '20px' }, pt: '20px' }}>
+          <FavoriteButton exercise={exerciseDetail} sx={{ fontSize: '32px' }} />
+        </Box>
+      )}
       <Detail exerciseDetail={exerciseDetail}/>
+      {exerciseDetail.id && (
+        <Box sx={{ px: { sm: '100px', xs: '20px' }, mb: '20px' }}>
+          <Button
+            variant="contained"
+            onClick={() => setShowTrackingForm((prev) => !prev)}
+            sx={{ bgcolor: '#FF2625', '&:hover': { bgcolor: '#e02020' } }}
+          >
+            {showTrackingForm ? 'Cancel Log' : 'Log Exercise'}
+          </Button>
+          {showTrackingForm && (
+            <TrackingForm
+              exercise={exerciseDetail}
+              onClose={() => setShowTrackingForm(false)}
+            />
+          )}
+        </Box>
+      )}
       <ExerciseVideos exerciseVideos={exerciseVideos} name={exerciseDetail.name}/>
       <SimilarExercises targetMuscleExercises={targetMuscleExercises} equipmentExercises={equipmentExercises} />
     </Box>
