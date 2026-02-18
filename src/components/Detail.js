@@ -1,5 +1,7 @@
 import React from 'react';
 import { Typography, Stack, Button } from '@mui/material';
+import FallbackImage from './FallbackImage';
+import AddToWorkoutButton from './AddToWorkoutButton';
 
 import BodyPartImage from '../assets/icons/body-part.png';
 import TargetImage from '../assets/icons/target.png';
@@ -25,7 +27,7 @@ const Detail = ({ exerciseDetail }) => {
 
   return (
     <Stack gap='60px' sx={{flexDirection: { lg: 'row'}, p: '20px', alignItems: 'center'}}>
-        <img src={gifUrl} alt={name} loading='lazy' className='detail-image' />
+        <FallbackImage src={gifUrl} alt={name} className='detail-image' />
 
         <Stack sx={{ gap: {lg: '35px', xs: '20px' }}}>
             <Typography variant='h3'>
@@ -48,6 +50,7 @@ const Detail = ({ exerciseDetail }) => {
                 </Typography>
               </Stack>
             ))}
+            <AddToWorkoutButton exercise={exerciseDetail} />
         </Stack>
     </Stack>
   )
