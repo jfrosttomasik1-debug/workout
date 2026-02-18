@@ -16,7 +16,7 @@ describe('FallbackImage', () => {
 
   it('displays image after successful load', () => {
     renderWithTheme(<FallbackImage src="test.jpg" alt="Test image" />);
-    const img = screen.getByRole('img', { name: 'Test image' });
+    const img = screen.getByAltText('Test image');
     fireEvent.load(img);
     expect(img).toBeVisible();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
@@ -24,7 +24,7 @@ describe('FallbackImage', () => {
 
   it('shows error fallback with alt text when image fails', () => {
     renderWithTheme(<FallbackImage src="bad.jpg" alt="Broken image" />);
-    const img = screen.getByRole('img', { name: 'Broken image' });
+    const img = screen.getByAltText('Broken image');
     fireEvent.error(img);
     expect(screen.getByText('Broken image')).toBeInTheDocument();
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('FallbackImage', () => {
 
   it('shows default fallback text when no alt provided', () => {
     renderWithTheme(<FallbackImage src="bad.jpg" />);
-    const img = screen.getByRole('img');
+    const img = screen.getByRole('img', { hidden: true });
     fireEvent.error(img);
     expect(screen.getByText('Image unavailable')).toBeInTheDocument();
   });
@@ -48,7 +48,7 @@ describe('FallbackImage', () => {
 
   it('uses loading="lazy" on the img tag', () => {
     renderWithTheme(<FallbackImage src="test.jpg" alt="Test" />);
-    const img = screen.getByRole('img', { name: 'Test' });
+    const img = screen.getByAltText('Test');
     expect(img).toHaveAttribute('loading', 'lazy');
   });
 });

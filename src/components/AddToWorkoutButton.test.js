@@ -19,10 +19,13 @@ describe('AddToWorkoutButton', () => {
     expect(screen.getByRole('button')).not.toBeDisabled();
   });
 
-  it('shows "Added!" after clicking', () => {
+  it('shows "In Workout" and is disabled after clicking', () => {
     renderWithProviders(<AddToWorkoutButton exercise={mockExercise} />);
     fireEvent.click(screen.getByRole('button', { name: 'Add to Workout' }));
-    expect(screen.getByRole('button', { name: 'Added!' })).toBeInTheDocument();
+    // After click, addExercise updates context synchronously so alreadyInWorkout
+    // becomes true on the next render, showing "In Workout" (not "Added!")
+    expect(screen.getByRole('button', { name: 'In Workout' })).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeDisabled();
   });
 
   it('shows "In Workout" and is disabled when exercise already in workout', () => {
@@ -47,8 +50,8 @@ describe('AddToWorkoutButton', () => {
     renderWithProviders(<AddToWorkoutButton exercise={mockExercise} />);
     const btn = screen.getByRole('button', { name: 'Add to Workout' });
     fireEvent.click(btn);
-    // After clicking, the button text changes confirming addExercise was called
-    expect(screen.getByRole('button', { name: 'Added!' })).toBeInTheDocument();
+    // After clicking, addExercise adds to context so alreadyInWorkout becomes true
+    expect(screen.getByRole('button', { name: 'In Workout' })).toBeInTheDocument();
   });
 });
 
