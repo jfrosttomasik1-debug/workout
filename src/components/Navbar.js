@@ -3,8 +3,14 @@ import { Link } from 'react-router-dom'
 import { Stack } from '@mui/material'
 
 import Logo from '../assets/images/Logo.png'
+import ThemeToggle from './ThemeToggle'
+import { useThemeContext } from '../contexts/ThemeContext'
 
-const Navbar = () => (
+const Navbar = () => {
+  const { mode } = useThemeContext();
+  const linkColor = mode === 'light' ? '#3A1212' : '#F5F5F5';
+
+  return (
     <Stack
       direction='row'
       justifyContent='space-around'
@@ -22,19 +28,18 @@ const Navbar = () => (
             }} />
         </Link>
 
-
             <Stack
               direction='row'
               gap='40px'
               fontSize='24px'
               fontFamily="Alegreya"
-              alignItems='flex-end'
+              alignItems='center'
             >
                 <Link
                   to='/'
                   style={{
                     textDecoration: 'none',
-                    color: '#3A1212',
+                    color: linkColor,
                     borderBottom: '3px solid #FF2625',
                     padding: '8px 0',
                     outline: 'none'
@@ -48,7 +53,7 @@ const Navbar = () => (
                   href='#exercises'
                   style={{
                     textDecoration: 'none',
-                    color: '#3A1212',
+                    color: linkColor,
                     padding: '8px 0',
                     outline: 'none'
                   }}
@@ -57,9 +62,11 @@ const Navbar = () => (
                 >
                   Exercises
                 </a>
+                <ThemeToggle />
             </Stack>
 
     </Stack>
-  )
+  );
+}
 
 export default Navbar
